@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangout Universe 🌌</title>
+<style>
+/* ===== Reset & Layout ===== */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+html, body { width:100%; height:100%; overflow:hidden; background:#0b0c10; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; }
+
+/* ===== Particles Background ===== */
+#particles { position:absolute; width:100%; height:100%; z-index:-1; overflow:hidden; }
+
+/* ===== Title ===== */
+h1 {
+    font-size:3.5em;
+    text-align:center;
+    margin-top:20px;
+    background: linear-gradient(90deg,#ff6ec7,#7ee8fa,#ffb347);
+    -webkit-background-clip:text;
+    color:transparent;
+    animation: gradientShift 6s linear infinite;
+}
+@keyframes gradientShift{
+    0%{background-position:0%;}
+    50%{background-position:100%;}
+    100%{background-position:0%;}
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display:inline-block;
+    padding:15px 35px;
+    margin:10px;
+    font-size:1.2em;
+    border:none;
+    border-radius:20px;
+    background: linear-gradient(45deg,#ff6ec7,#7ee8fa,#ffb347);
+    color:#000;
+    cursor:pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn:hover {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 0 20px #fff;
+}
+
+/* ===== Secret Box ===== */
+#secretBox {
+    margin-top:20px;
+    padding:20px 30px;
+    background: rgba(255,255,255,0.05);
+    border-radius:20px;
+    font-size:1.2em;
+    min-width:350px;
+    text-align:center;
+    transition: all 0.5s ease;
+}
+
+/* ===== Mini Game Area ===== */
+#gameArea {
+    margin-top:30px;
+    width:500px; height:300px;
+    background: rgba(255,255,255,0.05);
+    border:2px solid #fff;
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+}
+.ball {
+    width:25px; height:25px;
+    background:#ff6ec7; border-radius:50%;
+    position:absolute; top:140px; left:240px;
+    transition: left 0.1s, top 0.1s;
+}
+.obstacle {
+    width:40px; height:40px;
+    background:#7ee8fa;
+    position:absolute; border-radius:10px;
+}
+
+/* ===== Score ===== */
+#score { font-size:1.5em; margin-top:15px; text-align:center; }
+
+/* ===== Glow & Trail Effects ===== */
+.ball, .obstacle {
+    box-shadow: 0 0 15px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3);
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<h1>Hangout Universe 🌌</h1>
+
+<button class="btn" onclick="spillSecret()">Spill Secret</button>
+<div id="secretBox">Klik tombol untuk rahasia techy!</div>
+
+<div id="gameArea">
+    <div class="ball" id="ball"></div>
+</div>
+<div id="score">Score: 0</div>
+<p style="text-align:center;">Gunakan tombol panah ← → ↑ ↓ buat mainin bola dan hindari obstacles!</p>
+
+<script>
+// ===== Particles =====
+const particlesContainer = document.getElementById('particles');
+const particleCount = 250;
+let particles = [];
+for(let i=0;i<particleCount;i++){
+    let p = document.createElement('div');
+    p.style.width=p.style.height=(Math.random()*3+1)+'px';
+    p.style.background='white';
+    p.style.position='absolute';
+    p.style.top=Math.random()*100+'%';
+    p.style.left=Math.random()*100+'%';
+    particlesContainer.appendChild(p);
+    particles.push({el:p,x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,speed:Math.random()*0.5+0.2});
+}
+function animateParticles(){
+    particles.forEach(p=>{
+        p.y -= p.speed;
+        if(p.y<0) p.y=window.innerHeight;
+        p.el.style.top=p.y+'px';
+    });
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== Secrets =====
+const secrets = [
+    "Bess lagi ngoprek server sambil denger musik 🎵",
+    "Kopi + coding = life 🔥",
+    "Mini-game ini buat tes refleks coder sejati 🕹️",
+    "AI juga bisa jadi temen nongkrong loh 😎",
+    "Rahasia: Jangan lupa istirahat biar otak fresh 🧠",
+    "Debugging itu kayak puzzle level dewa 🧩",
+    "Shortcut keyboard bikin coding lebih gaspol ⌨️"
+];
+function spillSecret(){
+    const idx = Math.floor(Math.random()*secrets.length);
+    const box = document.getElementById('secretBox');
+    box.textContent = secrets[idx];
+    box.style.background='rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+',0.2)';
+}
+
+// ===== Mini Game =====
+const ball = document.getElementById('ball');
+let ballPos = {x:240,y:140};
+let speed=10;
+const gameArea = document.getElementById('gameArea');
+let obstacles=[]; let score=0;
+const scoreEl = document.getElementById('score');
+
+document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowLeft') ballPos.x -= speed;
+    if(e.key==='ArrowRight') ballPos.x += speed;
+    if(e.key==='ArrowUp') ballPos.y -= speed;
+    if(e.key==='ArrowDown') ballPos.y += speed;
+    if(ballPos.x<0) ballPos.x=0;
+    if(ballPos.x>475) ballPos.x=475;
+    if(ballPos.y<0) ballPos.y=0;
+    if(ballPos.y>275) ballPos.y=275;
+    ball.style.left=ballPos.x+'px';
+    ball.style.top=ballPos.y+'px';
+    checkCollision();
+});
+
+// ===== Obstacles =====
+function spawnObstacle(){
+    let obs = document.createElement('div');
+    obs.className='obstacle';
+    obs.style.left=Math.random()*460+'px';
+    obs.style.top='0px';
+    gameArea.appendChild(obs);
+    obstacles.push({el:obs,x:parseFloat(obs.style.left),y:0,speed:Math.random()*2+1});
+}
+setInterval(spawnObstacle,900);
+
+function moveObstacles(){
+    obstacles.forEach((obs,i)=>{
+        obs.y += obs.speed;
+        if(obs.y>280){
+            gameArea.removeChild(obs.el);
+            obstacles.splice(i,1);
+            score++;
+            scoreEl.textContent='Score: '+score;
+        } else obs.el.style.top=obs.y+'px';
+    });
+    requestAnimationFrame(moveObstacles);
+}
+moveObstacles();
+
+// ===== Collision Detection =====
+function checkCollision(){
+    obstacles.forEach(obs=>{
+        if(ballPos.x < obs.x+40 &&
+           ballPos.x+25 > obs.x &&
+           ballPos.y < obs.y+40 &&
+           ballPos.y+25 > obs.y){
+            alert('Game Over! Score kamu: '+score);
+            window.location.reload();
+        }
+    });
+}
+</script>
+</body>
+</html>
