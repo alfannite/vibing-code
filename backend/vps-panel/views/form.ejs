@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FanHosted</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <div class="card-header">
+        <h1>VPS Credentials</h1>
+        <p>FanHosted Environment</p>
+      </div>
+
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <form action="/create" method="POST" class="form">
+        <div class="field">
+          <label for="hostname">Hostname</label>
+          <input
+            type="text"
+            id="hostname"
+            name="hostname"
+            placeholder="my-server"
+            pattern="[a-z0-9\-]+"
+            title="Pakai Huruf kecil, angka, dan (-)"
+            required>
+          <small>Pakai Huruf kecil, angka, dan (-)</small>
+        </div>
+
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="user" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Minimal 8 karakter"
+            minlength="8"
+            required>
+        </div>
+
+        <div class="field">
+          <label for="sshkey">SSH Public Key <span class="optional">(opsional)</span></label>
+          <textarea id="sshkey" name="sshkey" rows="4" placeholder="ssh-ed25519 AAAA..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="package">Spesification</label>
+          <select id="package" name="package" required>
+            <% Object.entries(packages).forEach(([key, pkg]) => { %>
+              <option value="<%= key %>"><%= pkg.label %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <button type="submit" class="btn">Create Server</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

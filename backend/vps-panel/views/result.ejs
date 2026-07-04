@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini VPS Provider - Hasil</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <span class="status-icon"><%= success ? "✅" : "❌" %></span>
+
+      <div class="card-header">
+        <h1><%= success ? "VPS Berhasil Dibuat" : "Gagal Membuat VPS" %></h1>
+      </div>
+
+      <% if (error) { %>
+        <div class="alert <%= success ? 'alert-success' : 'alert-error' %>"><%= error %></div>
+      <% } %>
+
+      <table class="summary">
+        <% if (vmid) { %>
+          <tr><td>VMID</td><td><%= vmid %></td></tr>
+        <% } %>
+        <tr><td>Hostname</td><td><%= hostname %></td></tr>
+        <tr><td>Username</td><td><%= username %></td></tr>
+        <tr><td>Paket</td><td><%= package %></td></tr>
+        <% if (taskStatus) { %>
+          <tr><td>Status Task</td><td><%= taskStatus %></td></tr>
+        <% } %>
+      </table>
+
+      <a href="/" class="btn-secondary">&larr; Buat VPS lain</a>
+    </div>
+  </div>
+</body>
+</html>
