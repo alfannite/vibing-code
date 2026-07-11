@@ -198,8 +198,7 @@
     //     // extract text depending on response shape
     //     let reply = '';
     //     if(data.output && Array.isArray(data.output)){
-    //       reply = data.output.map(o=> (o.content && o.content[0] && o.content[0].text) || '').join('
-');
+    //       reply = data.output.map(o=> (o.content && o.content[0] && o.content[0].text) || '').join('');
     //     } else if(data.choices && data.choices[0]){
     //       reply = data.choices[0].message?.content || JSON.stringify(data);
     //     } else reply = JSON.stringify(data);
