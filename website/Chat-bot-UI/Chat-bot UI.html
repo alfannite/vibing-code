@@ -130,8 +130,7 @@
       // adapt based on Responses API shape
       if(body.output && body.output[0] && body.output[0].content){
         // some SDKs return structured content
-        return body.output.map(o=> (o.content && o.content[0] && o.content[0].text) || JSON.stringify(o)).join('
-');
+        return body.output.map(o=> (o.content && o.content[0] && o.content[0].text) || JSON.stringify(o)).join('');
       }
       // fallback
       return JSON.stringify(body);
