@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="id">
+
+
+
+
+<!-- HEADER / JUDUL -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DANA WEBSITE</title>
+
+
+
+
+  <!-- INI FILE CSS NYA  -->
+  <style>
+    :root {
+      --blue-main: #0ea5e9;
+      --blue-dark: #0284c7;
+      --bg: #f8fafc;
+      --muted: #64748b;
+      --white: #ffffff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: #0f172a; }
+
+    .container { max-width: 420px; margin: 20px auto; padding: 16px; }
+
+    header { display: flex; align-items: center; gap: 12px; }
+    .logo { width: 56px; height: 56px; border-radius: 14px; background: var(--blue-main); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+    .title { font-size: 18px; font-weight: 700; }
+    .subtitle { font-size: 12px; color: var(--muted); }
+
+    .profile-card { margin-top: 16px; padding: 18px; border-radius: 14px; background: linear-gradient(135deg, var(--blue-dark), var(--blue-main)); color: var(--white); }
+    .profile-row { display: flex; gap: 12px; align-items: center; }
+    .avatar { width: 80px; height: 80px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .name { font-size: 18px; font-weight: 700; }
+    .id { font-size: 12px; color: rgba(255,255,255,0.9); }
+
+    .balance-box { margin-top: 16px; text-align: center; background: rgba(255,255,255,0.15); border-radius: 10px; padding: 10px; }
+    .balance-label { font-size: 12px; }
+    .balance { font-size: 22px; font-weight: 800; margin-top: 6px; }
+
+    .small-btn { background: rgba(255,255,255,0.25); padding: 6px 12px; border-radius: 8px; cursor: pointer; display: inline-block; font-size: 13px; margin-top: 8px; }
+
+    .menu { margin-top: 16px; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-left { display: flex; gap: 10px; align-items: center; }
+    .icon { width: 36px; height: 36px; border-radius: 8px; background: #e0f2fe; display: flex; align-items: center; justify-content: center; color: var(--blue-dark); font-weight: 700; }
+
+    .trans { margin-top: 20px; }
+    .trans-list { background: var(--white); border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+    .trans-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; }
+    .trans-item:last-child { border-bottom: none; }
+
+    footer { margin-top: 18px; text-align: center; color: var(--muted); font-size: 12px; }
+
+    .modal { position: fixed; inset: 0; background: rgba(2,6,23,0.5); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 9999; }
+    .modal.active { display: flex; }
+    .card { background: white; border-radius: 12px; width: 100%; max-width: 400px; padding: 16px; position: relative; z-index: 10000; pointer-events: auto; }
+    .input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #dbeafe; margin-top: 6px; }
+    .btn-primary { background: var(--blue-main); border: none; color: white; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .btn-ghost { background: transparent; border: 1px solid #bae6fd; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+  </style>
+</head>
+
+
+
+
+
+<!-- INI ISI CONTENT NYA -->
+<body>
+  <div class="container">
+    <header>
+      <div class="logo"></div>
+      <div>
+        <div class="title">DANA PAYMENT</div>
+        <div class="subtitle">PPLG 2</div>
+      </div>
+    </header>
+
+    <section class="profile-card">
+      <div class="profile-row">
+        <div class="avatar" id="avatar">Foto</div>
+        <div>
+          <div class="name" id="displayName">KELOMPOK KERJA 02</div>
+          <div class="id" id="displayId">ID: 7778899001</div>
+          <div>
+            <span class="small-btn" onclick="openProfile()">Profil</span>
+            <span class="small-btn" onclick="openTopup()">+ Top Up</span>
+          </div>
+        </div>
+      </div>
+      <div class="balance-box">
+        <div class="balance-label">Saldo DANA</div>
+        <div class="balance" id="balance">Rp 2.000.000</div>
+      </div>
+    </section>
+
+    <div class="menu">
+      <div class="menu-item" onclick="goTo('pulsa')"><div class="menu-left"><div class="icon">P</div><div>Isi Pulsa / Paket Data</div></div><div>&gt;</div></div>
+      <div class="menu-item" onclick="goTo('transaksi')"><div class="menu-left"><div class="icon">T</div><div>Transaksi</div></div><div>&gt;</div></div>
+      <div class="menu-item" onclick="goTo('bantuan')"><div class="menu-left"><div class="icon">B</div><div>Bantuan</div></div><div>&gt;</div></div>
+    </div>
+
+    <div class="trans">
+      <div style="font-weight:700">Ringkasan Transaksi</div>
+      <div class="trans-list" id="transList">
+        <div class="trans-item"><div>Top up Bank</div><div style="color:green">+Rp 500.000</div></div>
+        <div class="trans-item"><div>Beli Pulsa</div><div style="color:red">-Rp 50.000</div></div>
+      </div>
+    </div>
+
+    <footer>WEBSITE DANA PAYMENT</footer>
+  </div>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="card">
+      <div id="modalContent"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+        <button class="btn-ghost" onclick="closeModal()">Batal</button>
+        <button class="btn-primary" id="modalAction">Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- INI FILE JAVA SCRIPT -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('avatar').addEventListener('click', () => alert('Ganti foto profil (simulasi).'));
+    });
+
+    function showModal(contentHtml, onAction) {
+      const modal = document.getElementById('modal');
+      document.getElementById('modalContent').innerHTML = contentHtml;
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      const btn = document.getElementById('modalAction');
+      if (btn) btn.onclick = onAction;
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function openProfile() {
+      showModal(`
+        <h3>Profil Saya</h3>
+        <p>Nama: Michael Johnson<br>Email: michael.j@example.com<br>ID: 7778899001</p>
+      `, () => { alert('Profil disimpan (simulasi)'); closeModal(); });
+    }
+
+    function openTopup() {
+      showModal(`
+        <h3>Top Up Saldo</h3>
+        <input id="nominal" class="input" type="number" placeholder="Masukkan nominal" />
+      `, () => {
+        const val = Number(document.getElementById('nominal').value);
+        if (!val || val <= 0) { alert('Masukkan nominal valid'); return; }
+        const balanceEl = document.getElementById('balance');
+        const curr = parseInt(balanceEl.textContent.replace(/[^0-9]/g, ''));
+        const next = curr + val;
+        balanceEl.textContent = 'Rp ' + next.toLocaleString('id-ID');
+        alert('Top up berhasil (simulasi)');
+        closeModal();
+      });
+    }
+
+    function goTo(page) {
+      if (page === 'pulsa') {
+        showModal(`
+          <h3>Isi Pulsa</h3>
+          <input id="nohp" class="input" placeholder="Nomor Ponsel" />
+          <select id="nomSel" class="input"><option value="">Pilih nominal</option><option>25000</option><option>50000</option><option>100000</option></select>
+        `, () => {
+          const no = document.getElementById('nohp').value.trim();
+          const nom = document.getElementById('nomSel').value;
+          if (!no || !nom) return alert('Lengkapi nomor & nominal');
+          alert('Transaksi pulsa berhasil (simulasi)');
+          closeModal();
+        });
+      } else if (page === 'transaksi') {
+        showModal('<h3>Riwayat Transaksi</h3><p>Lihat daftar di halaman utama.</p>', () => closeModal());
+      } else if (page === 'bantuan') {
+        showModal('<h3>Bantuan</h3><p>Hubungi support@demo.app</p>', () => closeModal());
+      }
+    }
+  </script>
+
+
+
+</body>
+</html>
