@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laporkan Masalah — [NAMA_PORTAL]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --c-bg1: #0a0f1e;
+      --c-orb1: #1a4fd6;
+      --c-orb2: #6c2bd9;
+      --c-orb3: #0ea5e9;
+      --c-glass-bg: rgba(255,255,255,0.06);
+      --c-glass-border: rgba(255,255,255,0.13);
+      --c-text: #e8eeff;
+      --c-text-muted: rgba(200,210,255,0.55);
+      --c-input-bg: rgba(255,255,255,0.07);
+      --c-input-border: rgba(255,255,255,0.15);
+      --c-input-focus: rgba(99,160,255,0.45);
+      --c-btn-from: #2563eb;
+      --c-btn-to: #7c3aed;
+      --c-accent: #60a5fa;
+      --c-success: #34d399;
+      --c-warning: #fbbf24;
+      --radius-card: 24px;
+      --radius-input: 12px;
+      --radius-btn: 50px;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font-body);
+      background: var(--c-bg1);
+      color: var(--c-text);
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND ── */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 15% 40%, #0b1e52 0%, transparent 55%),
+                  radial-gradient(ellipse at 85% 25%, #1a0b3d 0%, transparent 55%),
+                  radial-gradient(ellipse at 50% 85%, #061228 0%, transparent 50%),
+                  var(--c-bg1);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: min(480px, 75vw); height: min(480px, 75vw);
+      top: -15%; left: -12%;
+      background: radial-gradient(circle, var(--c-orb1), transparent 70%);
+    }
+    .orb-2 {
+      width: min(400px, 65vw); height: min(400px, 65vw);
+      bottom: 0; right: -10%;
+      background: radial-gradient(circle, var(--c-orb2), transparent 70%);
+      animation-duration: 16s; animation-delay: -8s;
+    }
+    .orb-3 {
+      width: min(280px, 50vw); height: min(280px, 50vw);
+      top: 40%; left: 45%;
+      background: radial-gradient(circle, var(--c-orb3), transparent 70%);
+      opacity: 0.18;
+      animation-duration: 28s; animation-delay: -4s;
+    }
+
+    @keyframes drift {
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(3%, 3%) scale(1.04); }
+      100% { transform: translate(-2%, -2%) scale(0.98); }
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(20px, 5vw, 48px) clamp(16px, 5vw, 24px);
+      gap: 20px;
+    }
+
+    /* ── BACK NAV ── */
+    .back-link {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--c-text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 0;
+      transition: color 0.2s, gap 0.2s;
+      animation: fadeUp 0.5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .back-link:hover {
+      color: var(--c-accent);
+      gap: 11px;
+    }
+
+    @media (min-width: 700px) {
+      .back-link { max-width: 500px; width: 100%; }
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      text-align: center;
+      animation: fadeUp 0.6s cubic-bezier(.22,1,.36,1) 0.05s both;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .page-header .icon-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(37,99,235,0.3), rgba(124,58,237,0.3));
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.2);
+    }
+
+    .page-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--c-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.3px;
+    }
+
+    .page-header p {
+      margin-top: 8px;
+      font-size: clamp(12px, 3vw, 13px);
+      color: var(--c-text-muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      background: var(--c-glass-bg);
+      border: 1px solid var(--c-glass-border);
+      border-radius: var(--radius-card);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      padding: clamp(24px, 6vw, 36px);
+      box-shadow:
+        0 32px 64px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 1px 0 rgba(255,255,255,0.12) inset;
+      animation: fadeUp 0.75s cubic-bezier(.22,1,.36,1) 0.1s both;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+
+    label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: rgba(200,215,255,0.65);
+      margin-bottom: 8px;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(180,200,255,0.35);
+      display: flex;
+      pointer-events: none;
+    }
+
+    .input-icon-top {
+      position: absolute;
+      left: 13px;
+      top: 14px;
+      color: rgba(180,200,255,0.35);
+      display: flex;
+      pointer-events: none;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--c-input-bg);
+      border: 1px solid var(--c-input-border);
+      border-radius: var(--radius-input);
+      color: var(--c-text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 400;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      padding: 13px 13px 13px 40px;
+    }
+
+    select {
+      padding: 13px 36px 13px 40px;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(180,200,255,0.5)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+    }
+
+    select option {
+      background: #1a2540;
+      color: var(--c-text);
+    }
+
+    textarea {
+      padding: 13px 13px 13px 40px;
+      resize: vertical;
+      min-height: 110px;
+      max-height: 260px;
+      line-height: 1.6;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(180,200,255,0.28);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(99,160,255,0.6);
+      box-shadow: 0 0 0 3px var(--c-input-focus);
+      background: rgba(255,255,255,0.10);
+    }
+
+    /* ── PRIORITY PILLS ── */
+    .priority-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .priority-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--c-input-border);
+      background: var(--c-input-bg);
+      color: var(--c-text-muted);
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
+    }
+
+    .priority-pill input[type="radio"] {
+      display: none;
+    }
+
+    .priority-pill:hover {
+      border-color: rgba(255,255,255,0.28);
+      color: var(--c-text);
+      background: rgba(255,255,255,0.09);
+    }
+
+    .priority-pill.selected-low    { border-color: #34d399; color: #34d399; background: rgba(52,211,153,0.1); }
+    .priority-pill.selected-medium { border-color: #fbbf24; color: #fbbf24; background: rgba(251,191,36,0.1); }
+    .priority-pill.selected-high   { border-color: #f87171; color: #f87171; background: rgba(248,113,113,0.1); }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: var(--radius-btn);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--c-btn-from) 0%, var(--c-btn-to) 100%);
+      box-shadow: 0 4px 24px rgba(37,99,235,0.35), 0 1px 0 rgba(255,255,255,0.15) inset;
+      margin-top: 24px;
+      cursor: pointer;
+      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s, opacity 0.2s;
+      position: relative;
+      overflow: hidden;
+      border: none;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.5), 0 1px 0 rgba(255,255,255,0.2) inset;
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── FEEDBACK STATES ── */
+    .feedback {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      font-weight: 400;
+      margin-top: 16px;
+      line-height: 1.55;
+    }
+
+    .feedback.show { display: flex; }
+
+    .feedback.success {
+      background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.3);
+      color: #6ee7b7;
+    }
+
+    .feedback.error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #fca5a5;
+    }
+
+    .feedback svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── SPINNER ── */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CONFIG NOTE ── */
+    .config-note {
+      max-width: 500px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(251,191,36,0.08);
+      border: 1px solid rgba(251,191,36,0.2);
+      font-size: 12px;
+      color: rgba(251,191,36,0.8);
+      line-height: 1.6;
+      animation: fadeUp 0.85s cubic-bezier(.22,1,.36,1) 0.2s both;
+    }
+
+    .config-note strong { color: #fbbf24; }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--c-text-muted);
+      text-align: center;
+      opacity: 0.5;
+      padding-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<div class="page">
+
+  <!-- BACK -->
+  <a href="hotspot.html" class="back-link">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Kembali ke Portal
+  </a>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="icon-wrap">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(96,165,250,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <h1>Laporkan Masalah</h1>
+    <p>Ceritain masalah koneksi kamu, laporan ini langsung dikirim ke admin jaringan secara real-time.</p>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="card">
+
+    <!-- Nama & Lokasi -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="f-name">Nama Kamu</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <input type="text" id="f-name" placeholder="e.g. Budi" maxlength="60" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="f-location">Lokasi / No. Kamar</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </span>
+          <input type="text" id="f-location" placeholder="e.g. Kamar 12, Lt. 2" maxlength="80" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Jenis Masalah -->
+    <div class="form-group">
+      <label for="f-category">Jenis Masalah</label>
+      <div class="input-wrap">
+        <span class="input-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </span>
+        <select id="f-category">
+          <option value="" disabled selected>— Pilih kategori —</option>
+          <option value="Tidak bisa konek sama sekali">Tidak bisa konek sama sekali</option>
+          <option value="Koneksi lambat / lemot">Koneksi lambat / lemot</option>
+          <option value="Sering putus-putus">Sering putus-putus</option>
+          <option value="Tidak bisa login portal">Tidak bisa login portal</option>
+          <option value="Sinyal lemah">Sinyal WiFi lemah</option>
+          <option value="Tidak dapat IP / DHCP">Tidak dapat IP / DHCP</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Prioritas -->
+    <div class="form-group">
+      <label>Tingkat Urgensi</label>
+      <div class="priority-group" id="priorityGroup">
+        <label class="priority-pill selected-low" data-val="Rendah" id="pill-low">
+          <input type="radio" name="priority" value="Rendah" checked />
+          🟢 Rendah
+        </label>
+        <label class="priority-pill" data-val="Sedang" id="pill-medium">
+          <input type="radio" name="priority" value="Sedang" />
+          🟡 Sedang
+        </label>
+        <label class="priority-pill" data-val="Tinggi" id="pill-high">
+          <input type="radio" name="priority" value="Tinggi" />
+          🔴 Tinggi
+        </label>
+      </div>
+    </div>
+
+    <!-- Deskripsi -->
+    <div class="form-group">
+      <label for="f-desc">Deskripsi Masalah</label>
+      <div class="input-wrap">
+        <span class="input-icon-top">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="12" x2="3" y2="12"/><line x1="21" y1="18" x2="9" y2="18"/></svg>
+        </span>
+        <textarea id="f-desc" placeholder="Ceritain lebih detail, kapan mulai, sudah coba apa, dsb…" maxlength="500"></textarea>
+      </div>
+    </div>
+
+    <!-- Nomor HP (opsional) -->
+    <div class="form-group">
+      <label for="f-phone">No. HP / WA <span style="font-size:10px;opacity:0.5;text-transform:none">(opsional, untuk follow-up)</span></label>
+      <div class="input-wrap">
+        <span class="input-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <input type="tel" id="f-phone" placeholder="e.g. 08123456789" maxlength="20" />
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <a href="javascript:void(0)" class="btn-primary" id="submitBtn" onclick="submitReport()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnLabel">Kirim Laporan ke Admin</span>
+      <svg id="btnIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </a>
+
+    <!-- FEEDBACK -->
+    <div class="feedback success" id="feedbackSuccess">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div>
+        <strong>Laporan terkirim! ✅</strong><br/>
+        Admin sudah menerima pesanmu via Telegram dan akan segera menindaklanjuti. Terima kasih, ya!
+      </div>
+    </div>
+
+    <div class="feedback error" id="feedbackError">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <strong>Gagal mengirim laporan.</strong><br/>
+        Pastikan jaringan aktif, atau coba lagi beberapa saat. <span id="errDetail"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONFIG NOTE untuk admin -->
+  <div class="config-note">
+    ⚙️ <strong>Untuk Admin:</strong> Ganti nilai <code>TELEGRAM_BOT_TOKEN</code> dan <code>TELEGRAM_CHAT_ID</code> di bagian script bawah halaman ini sebelum deploy.
+  </div>
+
+  <p class="footer-note">[NAMA_PORTAL] · Laporan langsung ke admin via Telegram</p>
+
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════
+  //  ⚙️  KONFIGURASI — GANTI DI SINI
+  // ═══════════════════════════════════════════════
+  const TELEGRAM_BOT_TOKEN = 'GANTI_DENGAN_BOT_TOKEN_KAMU';
+  // Cara dapat: chat @BotFather di Telegram → /newbot → copy token
+
+  const TELEGRAM_CHAT_ID   = 'GANTI_DENGAN_CHAT_ID_ADMIN';
+  // Cara dapat: chat @userinfobot → lihat Your chat id
+  // Atau pakai group/channel ID (awali dengan -)
+  // ═══════════════════════════════════════════════
+
+  // Priority pills logic
+  const pills = document.querySelectorAll('.priority-pill');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => {
+        p.classList.remove('selected-low', 'selected-medium', 'selected-high');
+      });
+      const val = pill.dataset.val;
+      if (val === 'Rendah')  pill.classList.add('selected-low');
+      if (val === 'Sedang')  pill.classList.add('selected-medium');
+      if (val === 'Tinggi')  pill.classList.add('selected-high');
+    });
+  });
+
+  // Format pesan Telegram
+  function buildMessage() {
+    const name      = document.getElementById('f-name').value.trim() || '(tidak diisi)';
+    const location  = document.getElementById('f-location').value.trim() || '(tidak diisi)';
+    const category  = document.getElementById('f-category').value || '(tidak dipilih)';
+    const desc      = document.getElementById('f-desc').value.trim() || '(tidak diisi)';
+    const phone     = document.getElementById('f-phone').value.trim() || '—';
+    const priority  = document.querySelector('input[name="priority"]:checked')?.value || 'Rendah';
+    const time      = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', hour12: false });
+
+    const urgencyEmoji = { 'Rendah': '🟢', 'Sedang': '🟡', 'Tinggi': '🔴' };
+
+    return `🌐 *Laporan Masalah Jaringan*
+━━━━━━━━━━━━━━━━━━━━
+👤 *Nama:* ${name}
+📍 *Lokasi:* ${location}
+📱 *No. HP:* ${phone}
+
+🔧 *Kategori:* ${category}
+${urgencyEmoji[priority]} *Urgensi:* ${priority}
+
+📝 *Deskripsi:*
+${desc}
+
+🕒 *Waktu:* ${time} WIB
+━━━━━━━━━━━━━━━━━━━━
+_Dikirim via [NAMA_PORTAL] Internet Portal_`;
+  }
+
+  async function submitReport() {
+    // Validasi minimal
+    const category = document.getElementById('f-category').value;
+    const desc     = document.getElementById('f-desc').value.trim();
+
+    if (!category) {
+      alert('Pilih kategori masalah dulu, ya!');
+      return;
+    }
+    if (desc.length < 10) {
+      alert('Deskripsi masalah minimal 10 karakter.');
+      return;
+    }
+
+    // Reset feedback
+    document.getElementById('feedbackSuccess').classList.remove('show');
+    document.getElementById('feedbackError').classList.remove('show');
+
+    // Loading state
+    const btn     = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const btnLabel = document.getElementById('btnLabel');
+    const btnIcon  = document.getElementById('btnIcon');
+
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.75';
+    spinner.style.display = 'block';
+    btnLabel.textContent = 'Mengirim…';
+    btnIcon.style.display = 'none';
+
+    const message = buildMessage();
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        // Sukses
+        document.getElementById('feedbackSuccess').classList.add('show');
+        // Reset form
+        document.getElementById('f-name').value = '';
+        document.getElementById('f-location').value = '';
+        document.getElementById('f-category').value = '';
+        document.getElementById('f-desc').value = '';
+        document.getElementById('f-phone').value = '';
+        // Reset priority
+        pills.forEach(p => p.classList.remove('selected-low','selected-medium','selected-high'));
+        document.getElementById('pill-low').classList.add('selected-low');
+        document.querySelector('input[value="Rendah"]').checked = true;
+
+        btnLabel.textContent = 'Terkirim ✓';
+        setTimeout(() => {
+          btnLabel.textContent = 'Kirim Laporan ke Admin';
+          btnIcon.style.display = '';
+          btn.style.pointerEvents = '';
+          btn.style.opacity = '';
+        }, 3000);
+      } else {
+        throw new Error(data.description || 'Telegram API error');
+      }
+
+    } catch (err) {
+      document.getElementById('errDetail').textContent = `(${err.message})`;
+      document.getElementById('feedbackError').classList.add('show');
+      btnLabel.textContent = 'Kirim Laporan ke Admin';
+      btnIcon.style.display = '';
+      btn.style.pointerEvents = '';
+      btn.style.opacity = '';
+    }
+
+    spinner.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
